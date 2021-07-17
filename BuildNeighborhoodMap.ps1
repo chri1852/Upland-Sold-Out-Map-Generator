@@ -1,4 +1,4 @@
-﻿#region /* Object Functions */
+#region /* Object Functions */
 
 function GetNewNeighborhoodInfoObject()
 {
@@ -1065,6 +1065,21 @@ function ClickCorrectColor()
 
 }
 
+function GetCityColors()
+{
+    param(
+        [Object]$City
+    )
+
+    Switch($City.Name)
+    {
+        "Bakersfield" { return $GLOBAL:BAKERSFIELD_COLORS }
+        "Chicago"     { return $GLOBAL:CHICAGO_COLORS }
+        "Cleveland"   { return $GLOBAL:CLEVELAND_COLORS }
+        default       { throw "City Automapping Not Supported" }
+    }
+}
+
 function DrawMap()
 {
     param(
@@ -1074,20 +1089,7 @@ function DrawMap()
 
     Add-Type -TypeDefinition $GLOBAL:DRAWCODE -ReferencedAssemblies System.Windows.Forms,System.Drawing
 
-    $colors = @()
-
-    if($City.Name -eq "Cleveland")
-    {
-        $colors = $GLOBAL:CLEVELAND_COLORS
-    }
-    elseif($City.Name -eq "Bakersfield")
-    {
-        $colors = $GLOBAL:BAKERSFIELD_COLORS
-    }
-    elseif($City.Name -eq "Chicago")
-    {
-        $colors = $GLOBAL:CHICAGO_COLORS
-    }
+    $colors = GetCityColors -City $City
 
     $sleepTime = 100
 
