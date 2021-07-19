@@ -18,7 +18,11 @@ If your screen is a different resolution, or the mapping is not working right, y
 
 ## Adding a new City With No Mapping
 
-To add a new city first create a new entry on the $GLOBAL:CITIES object with the next Id and the Name. Next you will need to scrape the Neighborhood data from UPX.World. This can be done by running Fiddler, a program the watches and displays web calls your computer makes, and then going to Upx.World. Look for a call to Host api.up2land.com, and a URL of /config/frontend. Open the inspector for that call and click on JSON for the response. Chances are the response body is encoded, so click the decode button. Once the decoding is done you should see a JSON object in the JSON tab with two items data, and status=success. Expand data --> neighborhoods, or click expand all. Use the below table to map the data in the JSON to a Neighborhood object:
+To add a new city first create a new line in the BuildCityData function following the pattern below. For example:
+  ```
+  $cities += BuildCityData_Sheboygan
+  ```
+Then Create a new function, BuildCityData_Sheboygan,  This will be similar to the other build cities functions. Next you will need to scrape the Neighborhood data from UPX.World. This can be done by running Fiddler, a program the watches and displays web calls your computer makes, and then going to Upx.World. Look for a call to Host api.up2land.com, and a URL of /config/frontend. Open the inspector for that call and click on JSON for the response. Chances are the response body is encoded, so click the decode button. Once the decoding is done you should see a JSON object in the JSON tab with two items data, and status=success. Expand data --> neighborhoods, or click expand all. Use the below table to map the data in the JSON to a Neighborhood object:
 
 | Upx.World Value | Neighborhood Object Value |
 |-|-|
@@ -26,14 +30,14 @@ To add a new city first create a new entry on the $GLOBAL:CITIES object with the
 | city_name | City |
 | text (before comma) | Name |
 
-For each neighborhood in the new city you should have a new entry on the $GLOBAL:NEIGHBORHOODS object that looks like this:
+For each neighborhood in the new city you should have a new entry on the city.neighborhood object in the BuildCityData_Sheboygan function that looks like this:
 
 ```
-$GLOBAL:NEIGHBORHOODS += GetNewNeighborhoodInfoObject -Id 726 -Name "Woodrow" -City "Staten Island"
+$city.Neighborhoods += GetNewNeighborhoodInfoObject -Id 726 -Name "Downtown" -City "Sheboygan"
 ```
 
 Once that is done you should be all set. Simply run the script and your new city will be available as an option.
 
 ## Adding Mapping to an Existing City
 
-If you want to add mapping to an existing city that does not have it, first you will need to add a new CityName_Auto.png file for that city. Next you will need to open it in Paint.Net, and use the GetMousePositions.ps1 script to add a X and Y coordinate for each Neighbood to the script. You will also need to create a new $GLOBAL:CITYNAME_COLORS object to add locations for the map colors for that City, remember to add a new entry to switch statement in the GetCityColors function.Finally once that is done add a -AutoMapping $true flag to the cooresponding city on the $GLOBAL:CITIES object.
+If you want to add mapping to an existing city that does not have it, first you will need to add a new CityName_Auto.png file for that city. Next you will need to open it in Paint.Net, and use the GetMousePositions.ps1 script to add a X and Y coordinate for each Neighbood to the script. You will also need to create a new set of color objects to add locations for the map colors for that City, an example of this can be seen in the BuildCityData function for any city that has automapping enabled. Finally once that is done add a -AutoMapping $true flag to the cooresponding city in its BuildCityData function.
