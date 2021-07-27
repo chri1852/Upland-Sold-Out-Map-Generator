@@ -5,12 +5,13 @@
 To use you will need to have Paint.Net installed, and be on a windows machine. The map painting works via ordering mouse clicks via the script, so it is critical that you have Paint.Net open on your main monitor at a resolution of 1920x1080. When you run the script make sure that the blank map image and the tools bar on Paint.Net are not covered by any other window. Follow the below steps to run the script:
 
 1. Open Paint.Net on your primary monitor, and ensure the tools bar is visable.
-2. Open the CityName_Auto.png file for the city you want to run.
-3. Open Powershell (ISE or Terminal) and run the BuildNeighborhoodMap.ps1 script.
-4. Select the City you wish to build by typing the cooresponding number and pressing enter.
-5. The script will then download the data from UPX.World.
-6. Once the download is complete it will begin to fill in the map. **DO NOT MOVE THE MOUSE DURING THIS TIME**
-7. Once the map is filled in the script will finish, update the date on the map and save it as a new file, and you are done.
+2. Ensure the color is set to Black.
+3. Open the CityName_Auto.png file for the city you want to run.
+4. Open Powershell (ISE or Terminal) and run the BuildNeighborhoodMap.ps1 script.
+5. Select the City you wish to build by typing the cooresponding number and pressing enter.
+6. The script will then download the data from UPX.World.
+7. Once the download is complete it will begin to fill in the map. **DO NOT MOVE THE MOUSE DURING THIS TIME**
+8. Once the map is filled in the script will finish, save the map as a new file, and you are done.
 
 ## Notes
 
@@ -40,4 +41,4 @@ Once that is done you should be all set. Simply run the script and your new city
 
 ## Adding Mapping to an Existing City
 
-If you want to add mapping to an existing city that does not have it, first you will need to add a new CityName_Auto.png file for that city. Next you will need to open it in Paint.Net, and use the GetMousePositions.ps1 script to add a X and Y coordinate for each Neighbood to the script. You will also need to create a new set of color objects to add locations for the map colors for that City, an example of this can be seen in the BuildCityData function for any city that has automapping enabled. Finally once that is done add a -AutoMapping $true flag to the cooresponding city in its BuildCityData function.
+If you want to add mapping to an existing city that does not have it, first you will need to add a new CityName_Auto.png file for that city. Next you will need to open it in Paint.Net, and use the GetMousePositions.ps1 script to add a X and Y coordinate for each Neighbood to the script. You will also need to create a new set of color objects to add locations for the map colors for that City, an example of this can be seen in the BuildCityData function for any city that has automapping enabled. You will also need to set a location to print the name and date of your city, as well as set the font size. Finally once that is done add a -AutoMapping $true flag to the cooresponding city in its BuildCityData function.
