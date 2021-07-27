@@ -39,6 +39,10 @@ function GetNewCityObject
         "Id" = $Id
         "Name" = $Name
         "AutoMapping" = $AutoMapping
+        "Font" = "Calibri"
+        "FontSize" = 48
+        "Text_X" = 0
+        "Text_Y" = 0
         "Colors" = @()
         "Neighborhoods" = @()
     }
@@ -64,8 +68,10 @@ function GetNewToolsObject
 {
     return New-Object -TypeName psobject -Property @{
 
-        "Pipette" = $Pipette
-        "Fill" = $Fill
+        "Pipette" = $null
+        "Fill" = $null
+        "Text" = $null
+        "FontSize" = $null
     }
 }
 
@@ -147,6 +153,8 @@ function GetTools()
     $Tools = GetNewToolsObject
     $Tools.Pipette = GetNewMouseLocationObject -X 51 -Y 306 -Name "TOOL_PIPETTE"
     $Tools.Fill = GetNewMouseLocationObject -X 21 -Y 258 -Name "TOOL_FILL"
+    $Tools.Text = GetNewMouseLocationObject -X 26 -Y 361 -Name "TOOL_TEXT"
+    $Tools.FontSize = GetNewMouseLocationObject -X 283 -Y 97 -Name "TOOL_FONTSIZE"
 
     return $Tools
 }
@@ -163,6 +171,7 @@ function BuildCityData()
     $cities += BuildCityData_Bakersfield
     $cities += BuildCityData_Chicago
     $cities += BuildCityData_Cleveland
+    $cities += BuildCityData_SantaClara
     
     return $cities
 }
@@ -669,6 +678,8 @@ function BuildCityData_StatenIsland()
 function BuildCityData_Bakersfield()
 {
     $city = GetNewCityObject -Id 7 -Name "Bakersfield" -AutoMapping $true
+    $city.Text_X = 1115
+    $city.Text_Y = 698
     
     $city.Colors += GetNewMouseLocationObject -X 1210 -Y 809 -Name "9"
     $city.Colors += GetNewMouseLocationObject -X 1210 -Y 850 -Name "20"
@@ -768,6 +779,9 @@ function BuildCityData_Bakersfield()
 function BuildCityData_Chicago()
 {
     $city = GetNewCityObject -Id 8 -Name "Chicago" -AutoMapping $true
+    $city.Text_X = 627 
+    $city.Text_Y = 827
+    $city.FontSize = 72
     
     $city.Colors += GetNewMouseLocationObject -X 692 -Y 906 -Name "9"
     $city.Colors += GetNewMouseLocationObject -X 692 -Y 925 -Name "20"
@@ -886,6 +900,8 @@ function BuildCityData_Chicago()
 function BuildCityData_Cleveland()
 {
     $city = GetNewCityObject -Id 9 -Name "Cleveland" -AutoMapping $true
+    $city.Text_X = 812
+    $city.Text_Y = 185
     
     $city.Colors += GetNewMouseLocationObject -X 377 -Y 222 -Name "9"
     $city.Colors += GetNewMouseLocationObject -X 377 -Y 260 -Name "20"
@@ -933,6 +949,38 @@ function BuildCityData_Cleveland()
     $city.Neighborhoods += GetNewNeighborhoodInfoObject -Id 935 -Name "University Circle" -City "Cleveland" -X 1315 -Y 539
     $city.Neighborhoods += GetNewNeighborhoodInfoObject -Id 936 -Name "West Boulevard" -City "Cleveland" -X 751 -Y 760
     $city.Neighborhoods += GetNewNeighborhoodInfoObject -Id 937 -Name "Woodland Hills" -City "Cleveland" -X 1286 -Y 662
+    
+    return $city
+}
+
+function BuildCityData_SantaClara()
+{
+    $city = GetNewCityObject -Id 10 -Name "Santa Clara" -AutoMapping $true
+    $city.Text_X = 860 
+    $city.Text_Y = 198
+    $city.FontSize = 42
+    
+    $city.Colors += GetNewMouseLocationObject -X 1078 -Y 486 -Name "9"
+    $city.Colors += GetNewMouseLocationObject -X 1078 -Y 516 -Name "20"
+    $city.Colors += GetNewMouseLocationObject -X 1078 -Y 544 -Name "30"
+    $city.Colors += GetNewMouseLocationObject -X 1078 -Y 576 -Name "40"
+    $city.Colors += GetNewMouseLocationObject -X 1078 -Y 609 -Name "50"
+    $city.Colors += GetNewMouseLocationObject -X 1260 -Y 486 -Name "60"
+    $city.Colors += GetNewMouseLocationObject -X 1260 -Y 518 -Name "70"
+    $city.Colors += GetNewMouseLocationObject -X 1260 -Y 548 -Name "80"
+    $city.Colors += GetNewMouseLocationObject -X 1260 -Y 578 -Name "90"
+    $city.Colors += GetNewMouseLocationObject -X 1260 -Y 607 -Name "99"
+    $city.Colors += GetNewMouseLocationObject -X 1078 -Y 447 -Name "100"
+
+    #TODO: UPDATE NEIGHBORHOOD IDS WHEN AVAILABLE ON UPX.WORLD
+
+    $city.Neighborhoods += GetNewNeighborhoodInfoObject -Id 908 -Name "North 101" -City "Santa Clara" -X 811 -Y 359
+    $city.Neighborhoods += GetNewNeighborhoodInfoObject -Id 908 -Name "South 101" -City "Santa Clara" -X 839 -Y 580
+    $city.Neighborhoods += GetNewNeighborhoodInfoObject -Id 908 -Name "North Central" -City "Santa Clara" -X 677 -Y 636
+    $city.Neighborhoods += GetNewNeighborhoodInfoObject -Id 908 -Name "West Central" -City "Santa Clara" -X 680 -Y 766
+    $city.Neighborhoods += GetNewNeighborhoodInfoObject -Id 908 -Name "East Central" -City "Santa Clara" -X 952 -Y 737
+    $city.Neighborhoods += GetNewNeighborhoodInfoObject -Id 908 -Name "Southwest" -City "Santa Clara" -X 652 -Y 919
+    $city.Neighborhoods += GetNewNeighborhoodInfoObject -Id 908 -Name "Southeast" -City "Santa Clara" -X 857 -Y 891
     
     return $city
 }
@@ -1169,6 +1217,17 @@ function DrawMap()
 
     $sleepTime = 100
 
+    # Write the title
+    [Clicker]::LeftClickAtPoint($Tools.Text.X, $Tools.Text.Y)
+    Start-Sleep -Milliseconds 100
+    [Clicker]::LeftClickAtPoint($Tools.FontSize.X, $Tools.FontSize.Y)
+    Start-Sleep -Milliseconds 100
+    $wshell.SendKeys("$($City.FontSize)")
+    Start-Sleep -Milliseconds 100
+    [Clicker]::LeftClickAtPoint($City.Text_X, $City.Text_Y)
+    Start-Sleep -Milliseconds 100
+    $wshell.SendKeys("$($City.Name) $(Get-Date -f "MM/dd/yy")")
+
     foreach($hood in $City.Neighborhoods)
     {
         [Clicker]::LeftClickAtPoint($Tools.Pipette.X, $Tools.Pipette.Y)
@@ -1179,7 +1238,7 @@ function DrawMap()
         Start-Sleep -Milliseconds $sleepTime
         [Clicker]::LeftClickAtPoint($hood.X, $hood.Y)
         Start-Sleep -Milliseconds $sleepTime
-    }
+    } 
 }
 
 function MainScriptFunction()
