@@ -1212,10 +1212,13 @@ function DrawMap()
     )
 
     Add-Type -TypeDefinition $GLOBAL:DRAWCODE -ReferencedAssemblies System.Windows.Forms,System.Drawing
+    $wshell = New-Object -ComObject wscript.shell;
 
     $Tools = GetTools 
 
     $sleepTime = 100
+
+    
 
     # Write the title
     [Clicker]::LeftClickAtPoint($Tools.Text.X, $Tools.Text.Y)
@@ -1238,7 +1241,8 @@ function DrawMap()
         Start-Sleep -Milliseconds $sleepTime
         [Clicker]::LeftClickAtPoint($hood.X, $hood.Y)
         Start-Sleep -Milliseconds $sleepTime
-    } 
+    }
+    
 }
 
 function MainScriptFunction()
@@ -1261,6 +1265,7 @@ function MainScriptFunction()
     if($city.AutoMapping)
     {
         DrawMap -City $city
+        "$($City.Name.Replace(' ', ''))_$(Get-Date -f "Mddyy")" | clip.exe
     }
 }
 
